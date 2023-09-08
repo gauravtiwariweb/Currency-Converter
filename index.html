@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #3498db; /* Background color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #fff; 
+            text-align:center;
+            padding: 10%;
+        }
+        form {
+            background-color: rgba(213, 198, 198, 0.8); /* Semi-transparent background */
+            padding: 24px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select, input {
+            width: 90%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #e74c3c; /* Button color */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c0392b; /* Button color on hover */
+        }
+
+        #result {
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #333; /* Result text color */
+        }
+    </style>
+</head>
+<body>
+   <h1>Currency Converter</h1>
+   <form>
+      <label>From:</label>
+      <select id="from">
+         <option value="USD">USD</option>
+         <option value="EUR">EUR</option>
+         <option value="GBP">GBP</option>
+         <option value="INR">INR</option>
+      </select>
+      <label>To:</label>
+      <select id="to">
+         <option value="USD">USD</option>
+         <option value="EUR">EUR</option>
+         <option value="GBP">GBP</option>
+         <option value="INR">INR</option>
+      </select>
+      <label>Amount:</label>
+      <input type="text" id="amount" />
+      <button type="button" id="convert">Convert</button>
+      <p id="result"></p>
+   </form>
+   <script>
+      const convert = document.getElementById("convert");
+      const result = document.getElementById("result");
+      const from = document.getElementById("from");
+      const to = document.getElementById("to");
+      const amount = document.getElementById("amount");
+      convert.addEventListener("click", function() {
+         let fromCurrency = from.value;
+         let toCurrency = to.value;
+         let amt = amount.value;
+         fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`)
+         .then(response => {
+               return response.json();
+         })
+         .then(data => {
+            let rate = data.rates[toCurrency];
+            let total = rate * amt;
+            result.innerHTML = `${amt} ${fromCurrency} = ${total}
+            ${toCurrency}`;
+         });
+      });
+   </script>
+</body>
+</html>
